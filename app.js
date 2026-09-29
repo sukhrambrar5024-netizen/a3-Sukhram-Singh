@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import data from './our-modules/data.js'; // <--- Add this import
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,6 +24,21 @@ app.get('/pages/:filename', (req, res) => {
 // Task 3: Redirect both "/" and "/pages" to "/pages/index.html"
 app.get(['/', '/pages'], (req, res) => {
     res.redirect('/pages/index.html');
+});
+
+// Task 4: API route for bands
+app.get('/api/music/:bandId', (req, res) => {
+    const { bandId } = req.params;
+
+    // Use the Array.find method to find the band
+    const band = data.find(b => b.id === bandId);
+
+    if (!band) {
+        return res.status(404).json({ error: 'Band not found' });
+    }
+
+    // Send the band as a JSON object
+    res.json(band);
 });
 
 app.listen(PORT, () => {
