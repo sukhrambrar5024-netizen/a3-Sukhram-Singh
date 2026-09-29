@@ -11,8 +11,6 @@ const PORT = 3000;
 // Task 2: Serve static files from the public folder
 app.get('/pages/:filename', (req, res) => {
     const { filename } = req.params;
-
-    // res.sendFile requires an absolute path
     const filePath = path.join(__dirname, 'public', filename);
 
     res.sendFile(filePath, (err) => {
@@ -22,9 +20,9 @@ app.get('/pages/:filename', (req, res) => {
     });
 });
 
-// Temporary home route
-app.get('/', (req, res) => {
-    res.send('Hello from Express!');
+// Task 3: Redirect both "/" and "/pages" to "/pages/index.html"
+app.get(['/', '/pages'], (req, res) => {
+    res.redirect('/pages/index.html');
 });
 
 app.listen(PORT, () => {
